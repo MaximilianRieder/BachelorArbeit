@@ -1,0 +1,12 @@
+#testData: false
+#day: 1
+#testdata(true): write day of the year 04.05.2020 -> 20200504
+#testdata(false): write weekday monday-sunday -> 1-7
+
+#example standardData mondays
+#testData: false
+#day: 1
+
+#example testdata 04.05.2020
+testData: true
+day: 20200504

@@ -1,2 +1,0 @@
-fehlende dependencys java 11
-packaging etc.

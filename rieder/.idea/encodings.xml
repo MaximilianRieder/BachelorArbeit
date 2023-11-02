@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/REC_ORT.csv" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/calendar_dates.csv" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/target/REC_FRT.csv" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/target/SEL_FZT_FELD.csv" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/target/configDayData.yaml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/target/fileExceptionsStandardData.yaml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/target/fileExceptionsTestData.yaml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/target/routes.csv" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/target/stop_times.csv" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/target/stops.csv" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/target/trips.csv" charset="UTF-8" />
+    <file url="PROJECT" charset="windows-1252" />
+  </component>
+</project>

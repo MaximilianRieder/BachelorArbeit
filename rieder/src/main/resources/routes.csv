@@ -1,0 +1,93 @@
+route_id,agency_id,route_short_name,route_long_name,route_type,route_color,route_text_color
+gfn-12-101e-1,Default,101,Seedorf - Weillohe - Gebelkofen - Scheuer - Obertraubling - Neutraubling gültig ab 16. September 2008,3,75B95B,FFFFFF
+gfn-12-102e-1,Default,102,Wörth Schule - Kiefenholz - Pfatter - Geisling - Leiterkofen - Neutraubling gültig ab 15. Dezember 2013 (nur EFA!),3,75B95B,FFFFFF
+gfn-12-103e-1,Default,103,Mallersdorf - Pfaffenberg - Buchhausen - Eggmühl Bahnhof - Unterlaichling - Schierling - Birnbach gültig ab 12. September 2013 (nur EFA!),3,75B95B,FFFFFF
+gfn-12-104e-1,Default,104,Oberroning - Birnbach - Schierling - Eggmühl - Zaitzkofen - Pfakofen - Buchhausen gültig ab 15. Dezember 2013 (nur EFA!),3,75B95B,FFFFFF
+gfn-12-105e-1,Default,105,(Regensburg -) Neutraubling - Industrie-/Gewerbegebiete (Oberheising - Rosenhof - Unterheising - Barbing),3,75B95B,FFFFFF
+gfn-12-106e-1,Default,106,Regenstauf - Kürn - Adlmannstein - Bernhardswald - Hauzendorf - Lehenfelden,3,75B95B,FFFFFF
+gfn-12-107e-1,Default,107,Samberg / Hackenberg - Wulkersdorf - Pettenreuth - Karlstein - Ramspau - Regenstauf,3,75B95B,FFFFFF
+gfn-12-108e-1,Default,108,Wenzenbach - Probstberg - Thanhausen - Hauzenstein - Regenstauf,3,75B95B,FFFFFF
+gfn-12-109e-1,gfn-RVV3,109,Reinhardshofen - Pielenhofen - Judenberg - Wolfsegg - Regenstauf,3,75B95B,FFFFFF
+gfn-12-110e-1,Default,110,Pielenhofen / Hochdorf - Burglengenfeld,3,75B95B,FFFFFF
+gfn-12-111e-1,Default,111,Matting - Pentling - Graß - Oberisling - Oberhinkofen - Neutraubling gültig ab 13. Dezember 2009,3,75B95B,FFFFFF
+gfn-12-112e-1,Default,112,Großberg - Graßlfing - Niedergebraching - Hohengebraching - Neutraubling gültig ab 13. Dezember 2009,3,75B95B,FFFFFF
+gfn-12-115e-1,Default,115,Nittenau - Wulkersdorf - Hackenberg - Seibersdorf - Bernhardswald - Wenzenbach gültig ab 15. Dezember 2013 (nur EFA!),3,75B95B,FFFFFF
+gfn-12-116-1,gfn-RVV3,116,Rohrbach - Steinsberg - Regenstauf,3,75B95B,FFFFFF
+gfn-12-117-1,gfn-RVV3,117,Regensburg HBF - Stobäusplatz - Weichs-DEZ Stadtamhof - Kareth - Oppersdorf - Lappersdorf - Rodau,3,75B95B,FFFFFF
+gfn-12-12e-1,gfn-RVV3,12,Rgbg. Hauptbahnhof - Kneiting - Pielenhofen - Heitzenhofen,3,75B95B,FFFFFF
+gfn-12-127e-1,gfn-RVV3,127,Eilsbrunn - Riegling / Kleinprüfening - Waltenhofen - Sinzing,3,75B95B,FFFFFF
+gfn-12-13e-1,gfn-RVV3,13,Hainsacker - Lorenzen - Lappersdorf - Wöhrdstraße - Dachauplatz - Regensburg Hauptbahnhof,3,75B95B,FFFFFF
+gfn-12-14e-1,gfn-RVV3,14,Hohenwarth - Judenberg - Wolfsegg - Oppersdorf - Regensburg Hauptbahnhof,3,75B95B,FFFFFF
+gfn-12-141-1,Default,141,Weiherdorf - Teublitz - Burglengenfeld - Maxhütte-Haidhof - Regenstauf,3,75B95B,FFFFFF
+gfn-12-142e-1,gfn-RVV3,142,Regenstauf - Zeitlarn - Lappersdorf - Pielenhofen / Kneiting,3,75B95B,FFFFFF
+gfn-12-15e-1,gfn-RVV3,15,Hohenfels - Kallmünz - Steinsberg - Lorenzen - Lappersdorf - Regensburg Hauptbahnhof,3,75B95B,FFFFFF
+gfn-12-16e-1,Default,16,(Oberndorf -) Bad Abbach - Großberg / Niedergebraching - Regensburg Ernst-Reuter-Platz,3,75B95B,FFFFFF
+gfn-12-17e-1,gfn-RVV3,17,Regensburg HBF - Dachauplatz - Stadtamhof - Kareth - Lappersdorf - Regendorf,3,75B95B,FFFFFF
+gfn-12-19-1,Default,19,Teugn - Lengfeld - Bad Abbach - Großberg - Pentling - Regensburg Klinikum - Universität - Hauptbahnhof,3,75B95B,FFFFFF
+gfn-12-20e-1,Default,20,Luckenpaint - Thalmassing - Gebelkofen - Obertraubling - Regensburg Otto-Hahn-Straße (Uni) - Hauptbahnhof gültig ab 15. Dezember 2013 (nur EFA!),3,75B95B,FFFFFF
+gfn-12-21e-1,Default,21,Regensburg Hauptbahnhof - Otto-Hahn-Str. (Uni) - Oberhinkofen - Obertraulbling - Alteglofsheim - Aufhausen - Petzkofen Regensburg Hauptbahnhof - Otto-Hahn-Str. (Uni) - Oberhinkofen - Obertraulbling - Alteglofsheim -  Petzkofen - Aufhausen - Pfakofen gültig ab 04. November 2013 (nur EFA) gültig ab 04. November 2013 (nur EFA),3,75B95B,FFFFFF
+gfn-12-214e-1,Default,21/24,Regensburg Hauptbahnhof - Otto-Hahn-Str. (Uni) - Oberhinkofen - Obertraulbling - Alteglofsheim - Aufhausen - Petzkofen Regensburg Hauptbahnhof - Otto-Hahn-Str. (Uni) - Oberhinkofen - Obertraulbling - Alteglofsheim -  Petzkofen - Aufhausen - Pfakofen gültig ab 04. November 2013 (nur EFA) gültig ab 04. November 2013 (nur EFA),3,75B95B,FFFFFF
+gfn-12-22e-1,Default,22,Langquaid - Wolkering - Gebelkofen - Obertraubling - Regensburg Hauptbahnhof gültig ab 12. Dezember 2010,3,75B95B,FFFFFF
+gfn-12-23e-1,Default,23,(Pfakofen -) Sünching - Mötzing - Riekofen - Mintraching - Niedertaubling - Obertraubling - Regensburg HBF Sünching - Mötzing - Riekofen - Mintraching - Niedertaubling - Obertraubling - Regensburg HBF,3,75B95B,FFFFFF
+gfn-12-24e-1,Default,24,(Allkofen -) Rogging - Pfakofen - Alteglofsheim - Obertraubling - Burgweinting - Regensburg Hbf gültig ab 04. November 2013  (nur EFA!),3,75B95B,FFFFFF
+gfn-12-25e-1,Default,25,Langquaid - Schierling - Eggmühl Bhf (- Neutraubling/Rgbg),3,75B95B,FFFFFF
+gfn-12-26e-1,gfn-RVV3,26,Regensburg Hauptbahnhof - Sinzing - Bruckdorf - Viehhausen Schneckenbach - Saxberg - Alling - Regensburg HBF,3,75B95B,FFFFFF
+gfn-12-267e-1,gfn-RVV3,26/27,Alling - Saxberg - Viehhausen - Schönhofen - Eilsbrunn - Sinzing - Regensburg Hauptbahnhof,3,75B95B,FFFFFF
+gfn-12-27e-1,gfn-RVV3,27,Regensburg Hauptbahnhof - Eilsbrunn - Schönhofen -Haugenried ( - Viergstetten),3,75B95B,FFFFFF
+gfn-12-280-1,gfn-RVV3,28,Abzw. Aichkirchen / Hemau - Deuerling - Undorf - Nittendorf - Etterzhausen - Regensburg Hauptbahnhof,3,75B95B,FFFFFF
+gfn-12-29e-1,gfn-RVV3,29,Regensburg Hauptbahnhof - Etterzhausen - Waldetzenberg - Oberpfraundorf - Dallackenried,3,75B95B,FFFFFF
+gfn-12-30e-1,Default,30,Regensburg Hauptbahnhof - Barbing - Neutraubling - Obertraubling - Burgweinting - Regensburg Hauptbahnhof gültig ab 15. Dezember 2013,3,75B95B,FFFFFF
+gfn-12-31e-1,Default,31,Regensburg Hauptbahnhof - Burgweinting - Obertraubling - Neutraubling - Barbing - Regensburg Hauptbahnhof gültig ab 15. Dezember 2013,3,75B95B,FFFFFF
+gfn-12-32e-1,Default,32,Regensburg Hauptbahnhof - IKEA gültig ab 1. Juni 2003,3,75B95B,FFFFFF
+gfn-12-33e-1,Default,33,Regensburg Hauptbahnhof - Barbing - Neutraubling - Wolfskofen - Illkofen - Geisling - Pfatter - Schönach Regensburg Hauptbahnhof - Barbing - Neutraubling - Wolfskofen - Illkofen - Geisling - Pfatter - Schönach Regensburg Hauptbahnhof - Barbing - Sarching - Illkofen - Geisling - Pfatter - Schönach gültig ab 15. Dezember 2012 gültig ab 15. Dezember 2012 gültig ab 15. Dezember 2012,3,75B95B,FFFFFF
+gfn-12-34-1,Default,34,(Cham / Roding -) Falkenstein - Zell (OPf.) - Wald - Roßbach - Bernhardswald - Wenzenbach - Regensburg Hbf.,3,75B95B,FFFFFF
+gfn-12-35e-1,Default,35,Wulkersdorf - Kürn - Fußenberg - Gonnersdorf - Wutzlhofen - Regensburg Hauptbahnhof gültig ab 09. Dezember 2012,3,75B95B,FFFFFF
+gfn-12-36e-1,Default,36,Pfaffenfang - Altenthann - Sulzbach - Donaustauf - Regensburg Hauptbahnhof gültig ab 07. Januar 2014 (nur EFA!),3,75B95B,FFFFFF
+gfn-12-367e-1,Default,36/37,Frauenzell - Brennberg - Süssenbach - Pfaffenfang - Altenthann - Sulzbach - Donaustauf - Regensburg HBF,3,75B95B,FFFFFF
+gfn-12-37e-1,Default,37,Frauenzell - Brennberg - Süssenbach - Sulzbach - Donaustauf - Regensburg Hauptbahnhof gültig ab 07. Januar 2014 (nur EFA!),3,75B95B,FFFFFF
+gfn-12-41-1,Default,41,Regensburg Hauptbahnhof - Zeitlarn - Regenstauf - Burglengenfeld - Teublitz - Schwandorf,3,75B95B,FFFFFF
+gfn-12-42-1,Default,42,Steinsberg - Kallmünz - Burglengenfeld - Regenstauf - Zeitlarn - Regensburg Hauptbahnhof,3,75B95B,FFFFFF
+gfn-12-43-1,Default,43,Regensburg Hauptbahnhof - Regenstauf - Nittenau - Neunburg v.W. / Roding,3,75B95B,FFFFFF
+gfn-12-5Ae-1,Default,5A,Zinzendorf - Wörth a. d. Donau - Donaustauf - Neutraubling - Harting - Regensburg Hauptbahnhof gültig ab 15. Dezember 2013 (nur EFA),3,75B95B,FFFFFF
+gfn-12-63e-1,Default,63,Tegernheim - Donaustauf - Barbing - Neutraubling - Harting BMW Tor 2 Tegernheim - Donaustauf - Barbing - Neutraubling - Harting BMW Tor 2 Tegernheim - Donaustauf - Barbing - Neutraubling gültig ab 15. Dezember 2013 gültig ab 15. Dezember 2013 gültig ab 15. Dezember 2013,3,75B95B,FFFFFF
+gfn-12-66e-1,gfn-RVV3,66,Painten - Aichkirchen - Hemau - Beratzhausen - Oberpfraundorf,3,75B95B,FFFFFF
+gfn-12-68-1,gfn-RVV3,68,(Undorf) - Schönhofen - Nittendorf - Etterzhausen Bahnhof,3,75B95B,FFFFFF
+gfn-12-69-1,gfn-RVV3,69,Painten Schule - Deuerling Bahnhof,3,75B95B,FFFFFF
+gfn-12-74e-1,Default,74,Sulzbach - Donaustauf - Tegernheim - Rgbg Schwabelweis - Rgbg Schulzentrum Isarstr. - Rgbg Donaustaufer Straße,3,75B95B,FFFFFF
+gfn-12-78-1,Default,78,Burgweinting Bhf - BMW Ausb.-Zentrum - BMW Tor 2 Neutr. Pommernstr. - Neutr. Zwickauer Str. (Krones),3,75B95B,FFFFFF
+gfn-12-VSL4-1,Default,VSL4,Rgbg. Hauptbahnhof - Wörth a. d. Donau (RVV-Linie 5) Wörth a. d. Donau - Straubing (VSL-Linie 4) Wörth a. d. Donau - Straubing,3,75B95B,FFFFFF
+gfn-15-5C-1,Default,810 (VLC) / 5 (RVV),Falkenstein - Rettenbach - Aumbrunn (RVV - VLC) gültig ab 12. Dezember 2010 (nur EFA!),3,75B95B,FFFFFF
+gfn-15-5R-1,Default,5,Regensburg HBF - Gewerbepark - Schwabelweis - Donaustauf - Sulzbach - Wörth a. d. Donau (- Falkenstein) Regensburg HBF - Gewerbepark - Schwabelweis - Donaustauf - Sulzbach - Wörth a. d. Donau (- Falkenstein) Regensburg HBF - Gewerbepark - Schwabelweis - Donaustauf - Sulzbach - Wörth a. d. Donau,3,75B95B,FFFFFF
+gfn-15-810-1,Default,810 (VLC) / 5 (RVV),Cham - Schorndorf - Michelsneukirchen - Falkenstein (VLC) gültig ab 12. Dezember 2010 (nur EFA!),3,75B95B,FFFFFF
+gfn-15-900-1,Default,900,,3,,
+gfn-20-44e-1,Default,CBR,Citybus Regenstauf,3,75B95B,FFFFFF
+rvb-11-1A-1,Default,1,Pommernstraße - HBF/Albertstraße - Prüfening,3,75B95B,FFFFFF
+rvb-11-10A-1,Default,10,(Prüfening - Dechbetten -) Königswiesen - Hauptbahnhof - An der Irler Höhe,3,75B95B,FFFFFF
+rvb-11-11A-1,Default,11,Burgweinting - Universität - OTH - Hauptbahnhof - Arnulfsplatz - Wernerwerkstraße,3,75B95B,FFFFFF
+rvb-11-18A-1,Default,18,Hauptbahnhof - Dörnberg,3,75B95B,FFFFFF
+rvb-11-2A-1,Default,2,(Graß -) Karl-Stieler-Straße - HBF/Albertstraße - Schwabenstraße,3,75B95B,FFFFFF
+rvb-11-204A-1,Default,X4,Hauptbahnhof - Universität - BMW Tor 2,3,75B95B,FFFFFF
+rvb-11-211A-1,Default,11A,Burgweinting - Universität - OTH - Hauptbahnhof - Arnulfsplatz - Wernerwerkstraße,3,75B95B,FFFFFF
+rvb-11-3A-1,Default,3,(Graß -) Humboldtstraße - Hauptbahnhof - Weichs - Reinhausen - Wutzlhofen/Sallerner Berg,3,75B95B,FFFFFF
+rvb-11-32A-1,Default,32,Ikea - Irl - Hauptbahnhof,3,75B95B,FFFFFF
+rvb-11-4A-1,Default,4,(Universität - Lilienthalstraße -) Arnulfsplatz - Weichs - Wutzlhofen,3,75B95B,FFFFFF
+rvb-11-5A-1,Default,5,Hauptbahnhof - Schwabelweis,3,75B95B,FFFFFF
+rvb-11-50A-1,Default,4A,Dreifaltigkeitsberg - Steinweg - Lechstraße,3,75B95B,FFFFFF
+rvb-11-53A-1,Default,X1,(Killermannstraße - Hauptbahnhof) / (Goethestraße - HBF),3,75B95B,FFFFFF
+rvb-11-54A-1,Default,8A,(Pentling - Taxisstr.)/ (Graß - Wolfgangschule Süd)/(VMG - HBF),3,75B95B,FFFFFF
+rvb-11-55A-1,Default,8B,Grünthal - Hintere Keilbergstraße - Konradschule - Gabelsbergerstraße,3,75B95B,FFFFFF
+rvb-11-6A-1,Default,6,Roter-Brach-Weg - HBF/Albertstraße - Klinikum,3,75B95B,FFFFFF
+rvb-11-7A-1,Default,7,Burgweinting - Schwabenstraße - Hauptbahnhof - Ziegetsdorf (- Pentling),3,75B95B,FFFFFF
+rvb-11-70A-1,Default,70,Amberger Straße - Sallerner Berg,3,75B95B,FFFFFF
+rvb-11-71A-1,Default,71,Erminoldweg - Hauptbahnhof,3,75B95B,FFFFFF
+rvb-11-72A-1,Default,72,Rauberstraße - Graß - Goethe-Gymnasium,3,75B95B,FFFFFF
+rvb-11-73A-1,Default,73,(Wernerwerkstr. - Lilienthalstr. - Killermannstr. - Wernerwerkstr.) (Elisabethstr. - HBF) / (AMG - HBF),3,75B95B,FFFFFF
+rvb-11-75A-1,Default,75,Schulzentrum Isarstraße - Gerhardinger Schule - Kneiting,3,75B95B,FFFFFF
+rvb-11-76A-1,Default,76,Burgweinting - Von-Müller-Gymnasium,3,75B95B,FFFFFF
+rvb-11-77A-1,Default,77,(Hauptbahnhof -) Pommernstraße - Haslbach,3,75B95B,FFFFFF
+rvb-11-78A-1,Default,78,Burgweinting Bhf - BMW Ausb.-Zentrum - BMW Tor 2 Neutr. Pommernstr.- Neutr. Zwickauer Str. (Krones),3,75B95B,FFFFFF
+rvb-11-79A-1,Default,X9,BMW Tor 2 - Hauptbahnhof,3,75B95B,FFFFFF
+rvb-11-8A-1,Default,8,(Irlbach-) Grünthal - Keilberg - Gewerbepark - Hauptbahnhof,3,75B95B,FFFFFF
+rvb-11-80A-1,Default,80,Burgweinting - Neutraubling Haidauer Str.,3,75B95B,FFFFFF
+rvb-11-9A-1,Default,9,Neutraubling - Harting - Burgweinting - Hauptbahnhof (- Weichs - Sallerner Berg),3,75B95B,FFFFFF
+rvb-11-97A-1,Default,A,Hauptbahnhof - Arnulfsplatz,3,75B95B,FFFFFF

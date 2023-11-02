@@ -1,3 +1,0 @@
-bei table = select... -> werden änderungen übernommen
-bei retainColumns muss = sein ?
-reject columns -> new table

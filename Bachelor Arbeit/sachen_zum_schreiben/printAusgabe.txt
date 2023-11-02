@@ -1,3 +1,0 @@
-bei print console -> hier immer angeben wann ankommt um die kantenlänge zu sehen -> kantengewicht ist ja ankunft nicht reine fahrzeit
-
-bei rest get -> hier die abfahrtszeiten machen, weil das hier ja mehr interessiert als die eigentlichen kantenlängen

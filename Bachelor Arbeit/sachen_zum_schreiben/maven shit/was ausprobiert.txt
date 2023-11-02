@@ -1,2 +1,0 @@
-maven jar plugin
-maven dependency plug in

@@ -1,6 +1,0 @@
-nullpointer exception
-debug wo -> bei sel_fzt_feld (ride events)
-bei Zeile 469 -> kein from und kein to Node (get node by identifyer -> null)
-700 -> teststeig (nicht in masterarbeit entfernt)
-
--> entfernen davon in rec_ort(location_info) / ride_events

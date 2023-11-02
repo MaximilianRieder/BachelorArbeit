@@ -1,0 +1,80 @@
+removeStoppingPointsIdentifiers:
+  - 700
+  - 800
+  - 900
+  - 1000
+  - 9200
+transferExceptions:
+  - identifier: 336
+    transferTime: 3
+  - identifier: 1010
+    transferTime: 3
+  - identifier: 1030
+    transferTime: 3
+  - identifier: 1090
+    transferTime: 3
+  - identifier: 1121
+    transferTime: 4
+  - identifier: 2001
+    transferTime: 2
+  - identifier: 2021
+    transferTime: 2
+  - identifier: 2033
+    transferTime: 2
+  - identifier: 2048
+    transferTime: 2
+  - identifier: 2085
+    transferTime: 3
+  - identifier: 2099
+    transferTime: 10
+  - identifier: 3009
+    transferTime: 2
+  - identifier: 3012
+    transferTime: 2
+  - identifier: 3025
+    transferTime: 2
+  - identifier: 3030
+    transferTime: 3
+  - identifier: 4012
+    transferTime: 2
+  - identifier: 4042
+    transferTime: 2
+  - identifier: 4060
+    transferTime: 2
+  - identifier: 4061
+    transferTime: 2
+  - identifier: 4064
+    transferTime: 2
+  - identifier: 4069
+    transferTime: 2
+  - identifier: 4071
+    transferTime: 3
+  - identifier: 4073
+    transferTime: 2
+  - identifier: 4080
+    transferTime: 3
+  - identifier: 4082
+    transferTime: 2
+  - identifier: 4085
+    transferTime: 2
+  - identifier: 4090
+    transferTime: 5
+  - identifier: 4102
+    transferTime: 2
+  - identifier: 5001
+    transferTime: 2
+  - identifier: 5016
+    transferTime: 2
+  - identifier: 6006
+    transferTime: 2
+  - identifier: 6010
+    transferTime: 4
+  - identifier: 6011
+    transferTime: 3
+  - identifier: 6012
+    transferTime: 2
+locationNameOverlaps:
+  - identifier: 2010
+    newName: "Aussiger Stra_e 2"
+#  - identifier: 3044
+#    newName: "Pommernstra_e_Neutraubling"

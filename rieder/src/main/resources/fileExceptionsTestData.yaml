@@ -1,0 +1,7 @@
+removeStoppingPointsIdentifiers:
+transferExceptions:
+locationNameOverlaps:
+  - identifier: 29
+    newName: "Abzw. Maierhofen 2"
+  - identifier: 152
+    newName: "Regensburg Hauptbahnhof 2"
