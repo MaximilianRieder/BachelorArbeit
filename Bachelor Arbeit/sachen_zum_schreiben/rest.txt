@@ -1,0 +1,12 @@
+wenn service im singleton -> geht dann dass man immer den gleichen graph benutzt
+wenn mehrere instanzen abfragen -> methode im graph immer neu?
+
+-> buch nachschauen
+
+-> register jackson + alle nötigen dependencys (java 11)
+
+-> make new dto, because of infinite recursion of way
+
+-> inject und all den shit
+
+-> kein repo sondern graph in service -> das kann man noch ausbauen

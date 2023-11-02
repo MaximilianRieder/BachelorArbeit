@@ -1,0 +1,13 @@
+hashset statt linkedlist in graph -> jetzt array list für bessere zugriffszeiten (vorher war einfügen wichtiger)
+
+TODO evtl cost in node einbauen(dann könnte man auch priority queue verwenden) (ist die üverlegung -> ist jedoch komisch und verhindert parallelisierung)
+
+statt array(cost) evtl in way einbauen
+->wenn nicht -> design entscheidung: schneller zugriff über array -> speichern schöne ausgabe über way object + PARALLELISIERUNG MÖGLICH (da node objecte nur gelesen werden müssen)
+
+schau commit "erster prototyp" -> edges wurden entfernt weil check unnötig (in ba?)
+
+wie sind funktionen abgesichert (z.b shortest way -> get edge weight -> current adjecent wird vorher nur für kanten erzeugt)
+
+line integrieren in node -> nicht wie in masterarbeit immer abfragen in dijkstra
+

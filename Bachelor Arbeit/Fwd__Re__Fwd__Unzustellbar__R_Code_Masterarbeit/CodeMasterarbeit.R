@@ -1,0 +1,495 @@
+# Code zur Masterarbeit 'Optimierung des OEPNV'
+# von Helena Huber, Betreuer Prof. Dr. Stefan Koerkel
+# OTH Regensburg - Fakultaet IM - Masterstudiengang Mathematik
+# Abgabe 17.06.2019
+
+# install packages
+install.packages("dplyr")
+install.packages("igraph") #Graph
+install.packages("sqldf")
+install.packages("lubridate") #Zeitumrechnung
+
+
+# library
+library(dplyr)
+library(igraph) 
+library(sqldf)
+library(lubridate) 
+
+# Daten
+REC_ORT <- read.csv("D:/Code/Repositorys/BusRouting/Bachelor Arbeit/Fwd__Re__Fwd__Unzustellbar__R_Code_Masterarbeit/REC_ORT.csv", sep=";") # Ortsinfo
+LID_VERLAUF <- read.csv("D:/Code/Repositorys/BusRouting/Bachelor Arbeit/Fwd__Re__Fwd__Unzustellbar__R_Code_Masterarbeit/LID_VERLAUF.csv", sep=";") #Linienverlauf durchnummeriert
+REC_FRT <- read.csv("D:/Code/Repositorys/BusRouting/Bachelor Arbeit/Fwd__Re__Fwd__Unzustellbar__R_Code_Masterarbeit/REC_FRT.csv", sep=";") # Fahrplandaten
+SEL_FZT_FELD <- read.csv("D:/Code/Repositorys/BusRouting/Bachelor Arbeit/Fwd__Re__Fwd__Unzustellbar__R_Code_Masterarbeit/SEL_FZT_FELD.csv", sep=";") # Fahrzeiten
+
+
+## relevante Daten
+#Ortsdaten
+REC_ORT <- REC_ORT[,c(2:5,8,9)] # ueberfluessige Variablen entfernen
+REC_ORT <- sqldf("select * from REC_ORT where [ONR_TYP_NR]=1") # Betriebshofpunkte entfernen
+REC_ORT <- REC_ORT[-c(2,558,563,588,589),] # Teststeige + E-Ladestation entfernen
+#Linienverlauf
+LID_VERLAUF <- LID_VERLAUF[,c(3:5,7,12)] # ueberfluessige Variablen entfernen
+LID_VERLAUF <- sqldf("select * from LID_VERLAUF where [PRODUKTIV]=1") # nur Servicefahrten
+LID_VERLAUF <- LID_VERLAUF[-c(371,372,373,1194, 1195),] # Teststeige entfernen
+#Fahrplan
+REC_FRT <- sqldf("select * from REC_FRT where [TAGESART_NR]=1") # nur Montage
+REC_FRT <- sqldf("select * from REC_FRT where [FAHRTART_NR]=1") # nur Normalfahrten
+REC_FRT <- REC_FRT[,c(3,4,8,9)] # ueberfluessige Variablen entfernen
+#Fahrzeiten
+SEL_FZT_FELD <- sqldf("select * from SEL_FZT_FELD where [ONR_TYP_NR]=1") # keine Betriebshoefe als Start
+SEL_FZT_FELD <- sqldf("select * from SEL_FZT_FELD where [SEL_ZIEL_TYP]=1") # keine Betriebshoefe als Ziel
+SEL_FZT_FELD <- SEL_FZT_FELD[,c(3,5,6,8)] # ueberfluessige Variablen entfernen
+
+
+# Haltestellen mit nicht-eindeutigen REC_ORT$ORT_NAME
+for (k in REC_ORT$ORT_NAME) {
+  if (length(unique(REC_ORT[which(REC_ORT$ORT_NAME ==k), 4])) > 1)
+  {print(unique(REC_ORT[which(REC_ORT$ORT_NAME == k), c(3,4,6)]))}
+}
+# ORT_NAME ORT_REF_ORT                            ORT_REF_ORT_NAME
+# 64  Keplerstra_e        1181  "Keplerstra_e"                            
+# 245 Keplerstra_e        3060  "Neutraubling Keplerstra_e"               
+
+# ORT_NAME ORT_REF_ORT                            ORT_REF_ORT_NAME
+# 82 AussigerStra_e        2005  "Aussiger Stra_e"                         
+# 88 AussigerStra_e        2010  "Aussiger Stra_e"  
+
+# ORT_NAME ORT_REF_ORT                            ORT_REF_ORT_NAME
+# 140 Pommernstra_e        2046  "Pommernstra_e"                           
+# 238 Pommernstra_e        3044  "Neutraubling Pommernstra_e"              
+
+# ORT_NAME ORT_REF_ORT                            ORT_REF_ORT_NAME
+# 204 Friedhof        3010  "Harting Friedhof"                        
+# 248 Friedhof         320  "Neutraubling Friedhof"     
+
+# nicht eindeutige ORT_NAMEs differenzieren
+REC_ORT$ORT_NAME <- as.character(REC_ORT$ORT_NAME)
+REC_ORT$ORT_NAME[REC_ORT$ORT_REF_ORT==3060] <- "Keplerstra_e_Neutraubling"
+REC_ORT$ORT_NAME[REC_ORT$ORT_REF_ORT==3044] <- "Pommernstra_e_Neutraubling"
+REC_ORT$ORT_NAME[REC_ORT$ORT_REF_ORT==3010] <- "Friedhof_Harting"
+REC_ORT$ORT_NAME[REC_ORT$ORT_REF_ORT==320] <- "Friedhof_Neutraubling"
+REC_ORT$ORT_NAME[REC_ORT$ORT_REF_ORT==2010] <- "AussigerStra_e_Dolomitenstra_e"
+REC_ORT$ORT_NAME <- as.factor(REC_ORT$ORT_NAME)
+
+
+# Haltepunkt je Haltestelle und Umsteigezeiten
+D <- REC_ORT[,c(4,2)]
+HSmitHP <- as.data.frame(table(D[1]))
+HSmitHP$Var1 <- as.character(HSmitHP$Var1)
+REC_ORT$ORT_REF_ORT <- as.character(REC_ORT$ORT_REF_ORT)
+HSmitHP <- unique(left_join(HSmitHP, REC_ORT, by = c("Var1" = "ORT_REF_ORT"))[,c(1,2,5,6,7)])
+names(HSmitHP)[1] <- "ORT_REF_ORT"
+# Umsteigezeit je Haltestelle = #Haltepunkte - 1
+HSmitHP <- cbind(HSmitHP, rep(NA,nrow(HSmitHP)))
+for (k in 1:nrow(HSmitHP)) {
+  HSmitHP[k,6] <- HSmitHP[k,2]-1
+}
+names(HSmitHP)[6] <- "Umsteigezeit"
+# Ausnahmen
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 336, arr.ind=FALSE),6] <- 3 # Johann-Hoesl-Str.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 1010, arr.ind=FALSE),6] <- 3 # Arnulfsplatz
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 1030, arr.ind=FALSE),6] <- 3 # Dachauplatz
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 1090, arr.ind=FALSE),6] <- 3 # Hauptbahnhof
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 1121, arr.ind=FALSE),6] <- 4 # Alberstr.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 2001, arr.ind=FALSE),6] <- 2 # An den Weichser Breiten
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 2021, arr.ind=FALSE),6] <- 2 # Harzstr.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 2033, arr.ind=FALSE),6] <- 2 # Koetztingerstr.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 2048, arr.ind=FALSE),6] <- 2 # Reinhausen Kirche
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 2085, arr.ind=FALSE),6] <- 3 # Weichser Weg
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 2099, arr.ind=FALSE),6] <- 10 # Siemensstr. /Continental
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 3009, arr.ind=FALSE),6] <- 2 # Frachtpostzentrum
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 3012, arr.ind=FALSE),6] <- 2 # Kirche (Harting)
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 3025, arr.ind=FALSE),6] <- 2 # Prinz-Ludwig-Str.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 3030, arr.ind=FALSE),6] <- 3 # Zuckerfabrikstr.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 4012, arr.ind=FALSE),6] <- 2 # Brahmsstr.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 4042, arr.ind=FALSE),6] <- 2 # Hermann-Geib-Str.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 4060, arr.ind=FALSE),6] <- 2 # Leoprechting
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 4061, arr.ind=FALSE),6] <- 2 # Grass Nord
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 4064, arr.ind=FALSE),6] <- 2 # Von-Mueller-Gymnasium
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 4069, arr.ind=FALSE),6] <- 2 # Rauberstr.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 4071, arr.ind=FALSE),6] <- 3 # Safferlingstr.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 4073, arr.ind=FALSE),6] <- 2 # Antoniuskirche
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 4080, arr.ind=FALSE),6] <- 3 # Universitaet
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 4082, arr.ind=FALSE),6] <- 2 # Unterer kath. Friedhof
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 4085, arr.ind=FALSE),6] <- 2 # Zeissstr.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 4090, arr.ind=FALSE),6] <- 5 # Asamstr.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 4102, arr.ind=FALSE),6] <- 2 # Hermann-Hoecherl-Str.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 5001, arr.ind=FALSE),6] <- 2 # Albertus-Magnus-Gymnasium
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 5016, arr.ind=FALSE),6] <- 2 # Lessingstr.
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 6006, arr.ind=FALSE),6] <- 2 # Oberpfalzbruecke
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 6010, arr.ind=FALSE),6] <- 4 # Pfaffensteiner Bruecke
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 6011, arr.ind=FALSE),6] <- 3 # Steinweg
+HSmitHP[which(HSmitHP$ORT_REF_ORT == 6012, arr.ind=FALSE),6] <- 2 # Wuerzburger Str.
+
+
+# Fahrplan erzeugen
+# Abfahrtszeiten je Haltepunkt und Fahrzeiten
+fahrplan <- inner_join(SEL_FZT_FELD,REC_FRT, by = c("FGR_NR" = "FGR_NR"))
+fahrplan <- fahrplan[order(fahrplan$FGR_NR, fahrplan$FRT_START),]
+fahrplan <- cbind(fahrplan, rep(NA,nrow(fahrplan))) # Spalte fuer Abfahrtszeit ergaenzen
+names(fahrplan)[8] <- "Abfahrt"
+fahrplan <- cbind(fahrplan, rep(NA,nrow(fahrplan))) # Spalte fuer Ankunftszeit ergaenzen
+names(fahrplan)[9] <- "Ankunft"
+startpunkte <-  sqldf("select min(rowid) rowid, FGR_NR, FRT_START  
+                      from fahrplan 
+                      group by FGR_NR") # waehlt fuer jede Fahrzeitgruppe die erste Zeile im data frame aus (=Beginn jeder Servicefahrt)
+for (i in startpunkte$rowid){
+  fahrplan[i,8] <- fahrplan[i,5]
+  fahrplan[i,9] <- fahrplan[i,5]+fahrplan[i,4]
+} # berechnet fuer jeden ersten Fahrtabschnitt aller Linienvarianten die Abfahrts- und Ankunftszeit zur ersten Startzeit am Tag
+
+for (i in 1:nrow(fahrplan)){
+  ifelse(fahrplan[i,5] !=fahrplan[i+1,5], 
+         fahrplan[i+1,c(8,9)] <- c(fahrplan[i+1,5],fahrplan[i+1,5]+fahrplan[i+1,4]),NA)
+} # berechnet fuer jede neue Startzeit einer Linienvariante die Abfahrts- und Ankunftszeit des ersten Fahrtabschnitts
+
+for (i in 1:nrow(fahrplan)) {
+  ifelse( is.na(fahrplan[i,8]) , 
+          fahrplan[i,c(8,9)] <- c(fahrplan[i-1,9], fahrplan[i-1,9]+fahrplan[i,4]),next)
+} # berechnet fuer alle weiteren Fahrtabschnitte die Abfahrts- und Ankunftszeiten
+
+fahrtereignisse <-fahrplan[,c(2,8,3,9)]# Abfahrtsort, -zeit, Ankunftsort, -zeit
+fahrtereignisse <- unique(fahrtereignisse)
+rm(startpunkte) # aufraeumen
+
+
+### Graph erstellen ###
+## Knoten erstellen ##
+
+# Zentrale Haltestellenknoten
+zhs <- as.integer(unique(REC_ORT[,4])) 
+# zugehoerige Haltestellen-Name
+station <- function(u){
+  if(u %in% zhs)   S <- droplevels(unique(REC_ORT[which(REC_ORT$ORT_REF_ORT == u, arr.ind=FALSE),3]))
+  else S <- "Falscher Eingabewert, u muss in zhs enthalten sein."
+  return(S)
+}
+# Haltepunktknoten
+# Beachte: die folgende Definition von hpk entspricht den Eintraegen der Variable REC_ORT$ORT_NR (aber andere Sortierung)
+hpk <- unique(LID_VERLAUF[,4])
+
+# Knoten gesamt
+V <- c(zhs,hpk)
+
+## Kanten erstellen ##
+# die Kanten werden ueber eine Tabelle mit Vorgaenger- und Nachfolgerknoten definiert
+
+# Umsteigekanten A von hpk nach zhs
+A <- REC_ORT[,c(2,4)]
+names(A)[1] <- "VON" # Variable benennen
+names(A)[2] <- "NACH" # Variable benennen
+
+# Umsteigekanten D von zhs nach hpk
+D <- REC_ORT[,c(4,2)]
+names(D)[1] <- "VON" # Variable benennen
+names(D)[2] <- "NACH" # Variable benennen
+
+# Routenkanten  R
+R <- unique(fahrtereignisse[,c(1,3)])
+names(R)[1] <- "VON"
+names(R)[2] <- "NACH"
+
+# Routenkanten allgemein
+R_allg <- data.frame(von=character(), nach=character(), linie=character(), variante = character())
+linien <- unique(as.vector(LID_VERLAUF[,2])) # einzelne Linien
+for (i in linien) {
+  for(k in 1:nrow(LID_VERLAUF)){
+    ifelse (LID_VERLAUF[k,2] ==i && LID_VERLAUF[k,3] == LID_VERLAUF[k+1,3] && LID_VERLAUF[k,1] <= LID_VERLAUF[k+1,1],
+            R_allg <-  rbind(R_allg, list(LID_VERLAUF$ORT_NR[k], LID_VERLAUF$ORT_NR[k+1], LID_VERLAUF$LI_NR[k], LID_VERLAUF$STR_LI_VAR[k] )),NA)
+  } # verbindet die aufeinanderfolgenden Haltepunkte zu Vorgaenger- und Nachfolgerknoten auf einer Linie
+} 
+# Variablen benennen
+names(R_allg)[1] <- "VON" 
+names(R_allg)[2] <- "NACH" 
+names(R_allg)[3] <- "LINIE" 
+names(R_allg)[4] <- "VARIANTE" 
+
+
+# Kanten gesamt
+E1 <- rbind(A[-3],D[-3],R) # Kanten fuer Montagsfahrplan
+
+
+
+## Umsteigegewichte auf A
+A <- cbind(A,rep(0, nrow(A)))
+names(A)[3] <- "Gewicht"
+A <- unique(A)
+
+## Umsteigegewichte auf D
+D <- cbind(D,rep(NA, nrow(D))) # leere Gewichtsspalte
+# Gewichtsspalte befuellen
+for (k in 1:nrow(D)) {
+  D[k,3] <- HSmitHP[which(unique(HSmitHP$ORT_REF_ORT) == D[k,1], arr.ind=FALSE),6]
+}
+names(D)[3] <- "Gewicht"
+D[3] <- D[3]*60 # Minuten in Sekunden
+rm(HSmitHP) # aufraeumen
+D <- unique(D)
+
+## dynamische Kantengewichte von R
+Kantengew <- function(u,v,t){ # Achtung: klappt nur, wenn Kante (u,v) \in E1 (fuer spaeteren Alg. erfuellt)
+  if(nrow(merge(A[which(A$VON == u & A$NACH == v),],A))>0){erg <- 0}
+  else if (nrow(merge(D[which(D$VON == u & D$NACH == v),],D))>0){erg <- unique(D[which(D$VON ==u & D$NACH ==v),3])}
+  else{
+    C_uv <- fahrtereignisse[which(fahrtereignisse$ORT_NR==u & fahrtereignisse$SEL_ZIEL == v),];
+    ifelse(max(C_uv$Abfahrt) >= t, 
+           verbindung <- C_uv[which(C_uv$Ankunft == min(C_uv[which(C_uv$Abfahrt >= t),4])),],
+           verbindung <- C_uv[which(C_uv$Ankunft == min(C_uv$Ankunft)),] )
+    erg <- unique(ifelse(max(C_uv$Abfahrt) >= t, 
+                         unique(verbindung[4]-t),
+                         unique(86400 + verbindung[4] - t)))
+  }
+  return(erg)
+}
+
+
+
+# FIFO-Bedingung
+fifo <- fahrtereignisse[order(fahrtereignisse$ORT_NR,fahrtereignisse$SEL_ZIEL,fahrtereignisse$Abfahrt, fahrtereignisse$Ankunft),]
+fifo1 <- data.frame(ORT_NR = as.numeric(), Abfahrt = as.numeric(), SEL_ZIEL = as.numeric(), Ankunft= as.numeric())
+for (k in unique(fifo$ORT_NR)) {
+  for (l in unique(fifo$SEL_ZIEL)) {
+    fifox <- fifo[which(fifo$ORT_NR== k & fifo$SEL_ZIEL == l ),] 
+    for (i in 1:nrow(fifox)) {
+      for (j in i+1:nrow(fifox)) {
+        ifelse(fifox[j,2] > fifox[i,4],break,
+               ifelse(fifox[i,2] < fifox[j,2] && fifox[i,4] >= fifox[j,4], fifo1 <- bind_rows(fifo1,fifox[c(i,j),]),NA))
+      }
+      
+    }
+    
+  }
+  
+}
+rm(fifox)
+rm (fifo)
+fifox <- data.frame()
+for (i in 1:nrow(fifo1)) {
+  fifox <- bind_rows(fifox, fahrplan[which(fahrplan$ORT_NR == fifo1[i,1] & fahrplan$Abfahrt == fifo1[i,2] & fahrplan$SEL_ZIEL == fifo1[i,3] & fahrplan$Ankunft == fifo1[i,4]),])
+} # ueberpruefe, ob diese Route unterschiedliche Fahrtzeiten hat 
+# --> Linie 5 ist langsamer als Linie 10 zw. Dachauplatz und Gabelsbergerstr. (Z.1-8 von fifox) sowie zw. Weissenburgstr. und Gabelsbergerstr.(Z.9-18 von fifox)  
+#     Linie C1 ist langsamer als Linie 10 zw. Haydnstr. und Arcaden (Z. 19-20 von fifox)
+#     Linie  C6 ist langsamer als Linie 6 zw. Otto-Hahn-Str. und Uni (Z. 21-22 von fifox)
+#     --> FIFO-Bed. erfuellt, da die Busrouten (Linien) jeweils unterschiedlich sind.
+#aufraeumen
+rm(fifo1)
+rm(fifox)
+
+
+
+### Algorithmus ###
+
+# PRIORITY QUEUE
+#https://rosettacode.org/wiki/Priority_queue#R
+PriorityQueue <- function() {
+  keys <- values <- NULL
+  insert <- function(key, value) {
+    ord <- findInterval(key, keys)
+    keys <<- append(keys, key, ord)
+    values <<- append(values, value, ord)
+  }
+  pop <- function() {
+    head <- list(key=keys[1],value=values[[1]])
+    values <<- values[-1]
+    keys <<- keys[-1]
+    return(head)
+  }
+  empty <- function() length(keys) == 0
+  environment()
+}
+
+
+# Auswahllisten fuer Start- und Zielknoten
+# Dabei muessen "Start" und "Ziel" in REC_ORT$ORT_NAME enthalten sein
+s <- select.list(as.character(REC_ORT$ORT_NAME))
+d <- select.list(as.character(REC_ORT$ORT_NAME))
+
+
+# Tabelle als Fahrplanauskunft
+dijkstra <-
+  function(V = V, E = E1, s = "Start", d = "Ziel", t = "HH:MM:SS") {
+    # leere Vektoren und  Datensaetze
+    a <- vector(length = length(V))
+    Weg <- data.frame(vorgaenger = character(), nachfolger = character(), Linie_Umstieg = as.character(), stringsAsFactors = FALSE)
+    fahrplanauskunft <- data.frame(Zeit = as.character(), OrtId = as.numeric(), Haltestelle = as.character(), 
+                                   Linie_Umstieg = as.character(), ZeitInSek = as.numeric(), stringsAsFactors = FALSE)
+    # Zeit und Ort konvertieren
+    t <- period_to_seconds(hms(t))
+    s <- as.numeric(unique(REC_ORT[which(REC_ORT$ORT_NAME == s), 4]))
+    d <- as.numeric(unique(REC_ORT[which(REC_ORT$ORT_NAME == d), 4]))
+    for (v in V) {
+      a[v] <- Inf
+    }
+    a[[s]] <- t
+    S <- vector() # permanent markierte Knoten
+    Q <- PriorityQueue() #Vorrangwarteschleife erzeugen
+    Q$insert(t, s) # Startereignis in Q einfuegen
+    while (!Q$empty()) {
+      ereig <- Q$pop()
+      u <- ereig[[2]]
+      a[[u]] <- ereig[[1]]
+      S <- c(S, u) # Knoten permanent markieren
+      if (as.numeric(u) == as.numeric(d)) {
+        break
+      }
+      E_relevant <-
+        E1[which(E1$VON == u), ] # Alle Kanten mit Quellknoten u
+      for (i in 1:nrow(E_relevant)) {
+        e <- E_relevant[i, ]
+        v <- as.numeric(e[[2]])
+        if (!(v %in% S)) {
+          ifelse(u == s,
+                 t1 <- as.numeric(a[[u]]),
+                 # Umsteigezeiten an Startbahnhof verschwinden
+                 t1 <- as.numeric(Kantengew(u, v, a[[u]])) + as.numeric(a[[u]])) # Ankunft in v
+          if (as.numeric(a[[v]]) > t1) {
+            if (a[[v]] == Inf) {
+              Q$insert(t1, v)
+            }
+            else{
+              Q$keys <- Q$keys[-which(Q$values == v)] # Update in Q
+              Q$values <- Q$values[-which(Q$values == v)]
+              Q$insert(t1, v)
+            }
+            a[[v]] <- t1
+            # naechste Zeile: 1. Bedingung ueberprueft, ob es schon einen Vorgaenger von v gibt und ersetzt ihn ggf.
+            ifelse(v %in% Weg$nachfolger,
+                   Weg[which(Weg$nachfolger == v), ] <-
+                     c(u, v, ifelse(
+                       u %in% zhs,
+                       "Weiterfahrt um",
+                       ifelse(
+                         v %in% zhs,
+                         "Umstieg",
+                         ifelse(t1 > 90000, unique(fahrplan[which(fahrplan$ORT_NR == u & # t1 > 90000 --> nach Betriebsschluss wird Tages-Fahrplan wiederholt
+                                                                    fahrplan$SEL_ZIEL == v & fahrplan$Ankunft == t1 - 86400), 6]),
+                                unique(fahrplan[which(fahrplan$ORT_NR == u &
+                                                        fahrplan$SEL_ZIEL == v & fahrplan$Ankunft == t1), 6]))
+                       )
+                     )),
+                   Weg[nrow(Weg) + 1, ] <-
+                     list(u, v, ifelse(
+                       u %in% zhs,
+                       "Weiterfahrt um",
+                       ifelse(
+                         v %in% zhs,
+                         "Umstieg",
+                         ifelse(t1 > 90000, unique(fahrplan[which(fahrplan$ORT_NR == u & # t1 > 90000 --> nach Betriebsschluss wird Tages-Fahrplan wiederholt
+                                                                    fahrplan$SEL_ZIEL == v & fahrplan$Ankunft == t1 - 86400), 6]),
+                                unique(fahrplan[which(fahrplan$ORT_NR == u &
+                                                        fahrplan$SEL_ZIEL == v & fahrplan$Ankunft == t1), 6]))
+                       )
+                     )))
+          }
+        }
+      }
+    }
+    v <- d
+    fahrplanauskunft[nrow(fahrplanauskunft) + 1, ] <-
+      c(as.character(seconds_to_period(as.numeric(a[[v]]))),
+        as.numeric(v),
+        ifelse(as.numeric(v) %in% hpk, levels(REC_ORT[which(REC_ORT$ORT_NR == as.numeric(v)), 3])[REC_ORT[which(REC_ORT$ORT_NR == as.numeric(v)), 3]],
+               levels(REC_ORT[which(REC_ORT$ORT_REF_ORT == as.numeric(v)), 3])[REC_ORT[which(REC_ORT$ORT_REF_ORT == as.numeric(v)), 3]]),
+        "Ankunft am Ziel",
+        as.numeric(a[[v]])
+      )
+    while (v != s) {
+      v <- as.numeric(Weg[which(Weg$nachfolger == v), 1])
+      fahrplanauskunft[nrow(fahrplanauskunft) + 1,] <-
+        c(as.character(seconds_to_period(as.numeric(a[[v]]))),
+          as.numeric(v),
+          ifelse(
+            as.numeric(v) %in% hpk,
+            levels(REC_ORT[which(REC_ORT$ORT_NR == as.numeric(v)), 3])[REC_ORT[which(REC_ORT$ORT_NR == as.numeric(v)), 3]],
+            levels(REC_ORT[which(REC_ORT$ORT_REF_ORT == as.numeric(v)), 3])[REC_ORT[which(REC_ORT$ORT_REF_ORT == as.numeric(v)), 3]]
+          ),
+          ifelse(v != s,
+                 Weg[which(Weg$nachfolger ==
+                             as.numeric(v)), 3],
+                 "gewuenschter Start"),
+          as.numeric(a[[v]])
+        ) # s hat keinen Vorgaenger
+    }
+    for (i in 1:nrow(fahrplanauskunft)) { # Zeitpunkt der Weiterfahrt korrigieren
+      if (fahrplanauskunft[i,4] == "Weiterfahrt um") {
+        ab <- as.numeric(fahrplanauskunft[i,2])
+        an <- as.numeric(fahrplanauskunft[i-1,2])
+        ank <- as.numeric(fahrplanauskunft[i-1,5])
+        ifelse(as.numeric(fahrplanauskunft[i-1,5]) > 90000,
+               fahrplanauskunft[i,1] <- as.character(seconds_to_period(as.numeric(fahrtereignisse[which(
+                 fahrtereignisse$ORT_NR == ab & fahrtereignisse$SEL_ZIEL == an & fahrtereignisse$Ankunft == ank-86400),2]) + 86400)),
+               fahrplanauskunft[i,1] <- as.character(seconds_to_period(as.numeric(fahrtereignisse[which(
+                 fahrtereignisse$ORT_NR == ab & fahrtereignisse$SEL_ZIEL == an & fahrtereignisse$Ankunft == ank),2])))
+        )
+        
+      }
+      
+    }
+    # Abfahrtszeit am Start bestimmen
+    v1 <- as.numeric(fahrplanauskunft[nrow(fahrplanauskunft) - 1, 2]) # erster Knoten nach s
+    v2 <- as.numeric(fahrplanauskunft[nrow(fahrplanauskunft) - 2, 2]) # zweiter Knoten nach s
+    if (as.numeric(a[[v2]]) > 90000) { # fuer Fahrten ab 01.00 Uhr des Folgetages
+      fahrplanauskunft[nrow(fahrplanauskunft) - 1, 1] <-
+        as.character(seconds_to_period(as.numeric(fahrtereignisse[which(
+          fahrtereignisse$ORT_NR == v1 &
+            fahrtereignisse$SEL_ZIEL == v2 &
+            fahrtereignisse$Ankunft == as.numeric(a[[v2]]) - 86400
+        ), 2]) + 86400))
+      fahrplanauskunft[nrow(fahrplanauskunft) - 1, 5] <-
+        as.numeric(fahrtereignisse[which(
+          fahrtereignisse$ORT_NR == v1 &
+            fahrtereignisse$SEL_ZIEL == v2 &
+            fahrtereignisse$Ankunft == as.numeric(a[[v2]]) - 86400
+        ), 2]) + 86400
+    }
+    else {
+      fahrplanauskunft[nrow(fahrplanauskunft) - 1, 1] <-
+        as.character(seconds_to_period(as.numeric(fahrtereignisse[which(
+          fahrtereignisse$ORT_NR == v1 &
+            fahrtereignisse$SEL_ZIEL == v2 &
+            fahrtereignisse$Ankunft == as.numeric(a[[v2]])
+        ), 2])))
+      fahrplanauskunft[nrow(fahrplanauskunft) - 1, 5] <-
+        as.numeric(fahrtereignisse[which(
+          fahrtereignisse$ORT_NR == v1 &
+            fahrtereignisse$SEL_ZIEL == v2 &
+            fahrtereignisse$Ankunft == as.numeric(a[[v2]])
+        ), 2])
+    } # Abfahrtszeit am Start
+    fahrplanauskunft[nrow(fahrplanauskunft) - 1, 4] <-
+      "Abfahrt am Start"
+    print(paste("Zeit zwischen gewuenschter Abfahrt und Ankunft am Ziel:", as.character(seconds_to_period(as.numeric(fahrplanauskunft[1,5])- as.numeric(fahrplanauskunft[nrow(fahrplanauskunft),5]))), sep = " "))
+    print(paste("Tatsaechliche Reisezeit:", as.character(seconds_to_period(as.numeric(fahrplanauskunft[1,5])- as.numeric(fahrplanauskunft[nrow(fahrplanauskunft)-1,5]))), sep = " "))
+    fahrplanauskunft <- fahrplanauskunft[dim(fahrplanauskunft)[1]:1, ]
+    for (k in 4:nrow(fahrplanauskunft) - 1) {
+      # bevorzugt auf gleicher Linie weiterfahren
+      if (fahrplanauskunft[k - 1, 4] %in% fahrplan[which(
+        fahrplan$SEL_ZIEL == fahrplanauskunft[k, 2] &
+        fahrplan$ORT_NR == fahrplanauskunft[k -
+                                            1, 2] &
+        fahrplan$Ankunft == as.numeric(fahrplanauskunft[k, 5])
+      ), 6]) {
+        fahrplanauskunft[k, 4] <- fahrplanauskunft[k - 1, 4]
+      }
+    }
+    fahrplanauskunft <- fahrplanauskunft[, c(1, 3, 4)]
+    return(View(fahrplanauskunft))
+  }
+
+
+
+# Beispiele in Kapitel 6 und 7
+dijkstra(V, E1, "Fischmarkt", "Arnulfsplatz","08:00:00") # Bsp. 6.1
+dijkstra(V,E1, "HBF/Albertstra_e", "TechCampus/OTH", "07:30:00") # Bsp. 6.2
+dijkstra(V, E1, "Universitdt", "Pröfening" ,"17:45:00") # Bsp. 6.3
+dijkstra(V,E1, "Goethestra_e", "Rennplatz", "23:55:00") # Bsp. 6.4
+dijkstra(V,E1, "Goethestra_e", "Rennplatz", "00:00:00") # Bsp. 6.4
+dijkstra(V, E1, "Fischmarkt", "Dachauplatz","23:55:00") # Bsp. 6.5
+
+dijkstra(V,E1, "HBF/Albertstra_e", "TechCampus/OTH", "07:37:00") # Bsp. Abb. 7.1
+dijkstra(V, E1, "Dachauplatz", "Wei_enburgstra_e", "09:28:00") # Bsp. Abb. 7.2 
+dijkstra(V, E1, "Dachauplatz", "Wei_enburgstra_e", "09:33:00") # Bsp. Abb. 7.3
+
+dijkstra(V, E1, "Wvhrdstra_e", "OTHRegensburg", "07:30:00")
+
